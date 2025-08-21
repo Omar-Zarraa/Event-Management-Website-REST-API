@@ -37,12 +37,12 @@ func (event Event) Save() error {
 	return err
 }
 
-func GetAllEvents() ([]Event,error) {
+func GetAllEvents() ([]Event, error) {
 	selectQuery := `SELECT * FROM Events`
 
 	rows, err := db.DB.Query(selectQuery)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -52,16 +52,41 @@ func GetAllEvents() ([]Event,error) {
 		var event Event
 		err := rows.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.Date, &event.UserID)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 		events = append(events, event)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil,err
+		return nil, err
 	}
 
-	return events,nil
+	return events, nil
 }
 
-//func AddEvent(id, userId int, name, description, location string, date time.Time)
+func GetEventByID(id int64) (*Event, error) {
+	query := "SELECT * FROM Events WHERE ID = ?"
+	row := db.DB.QueryRow(query, id)
+	var event Event
+	err := row.Scan(&event.ID, &event.Name, &event.Description, &event.Location, &event.Date, &event.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &event, nil
+}
+
+func (event Event) UpdateEvent() error {
+	updateQuery :=
+		`UPDATE Events
+	SET Name = ?, Description = ?, Location = ?, Date = ?
+	WHERE ID = ?`
+
+	pQuery, err := db.DB.Prepare(updateQuery)
+	if err != nil {
+		return err
+	}
+	defer pQuery.Close()
+
+	_, err = pQuery.Exec(event.Name, event.Description, event.Location, event.Date, event.ID)
+	return err
+}
