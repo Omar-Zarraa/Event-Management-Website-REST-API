@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+
 	"github.com/Omar-Zarraa/REST-API/db"
 	"github.com/Omar-Zarraa/REST-API/utils"
 )
@@ -34,4 +36,48 @@ func (user User) Save() error {
 	user.ID = userID
 
 	return err
+}
+
+func (user *User) ValidateUser() error {
+	query := "SELECT ID, Password FROM Users WHERE Email=?"
+	row := db.DB.QueryRow(query, user.Email)
+
+	var retrievedPass string
+	err := row.Scan(&user.ID, &retrievedPass)
+	if err != nil {
+		return errors.New("Credentials invalid")
+	}
+
+	if !utils.CheckPasswordHash(user.Password, retrievedPass) {
+		return errors.New("Credentials invalid")
+	}
+
+	return nil
+}
+
+func GetAllUsers() ([]User, error) {
+	selectQuery := `SELECT * FROM Users`
+
+	rows, err := db.DB.Query(selectQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users = []User{}
+
+	for rows.Next() {
+		var user User
+		err := rows.Scan(&user.ID, &user.Email, &user.Password)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return users, nil
 }
