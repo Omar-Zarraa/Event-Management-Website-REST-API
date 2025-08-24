@@ -90,3 +90,17 @@ func (event Event) UpdateEvent() error {
 	_, err = pQuery.Exec(event.Name, event.Description, event.Location, event.Date, event.ID)
 	return err
 }
+
+func (event Event) DeleteEvent() error {
+	delQuery := `DELETE FROM Events
+	WHERE ID = ?`
+
+	stmt, err := db.DB.Prepare(delQuery)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.ID)
+	return err
+}
