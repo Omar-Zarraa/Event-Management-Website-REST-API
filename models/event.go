@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"github.com/Omar-Zarraa/REST-API/db"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/db"
 )
 
 type Event struct {
@@ -102,5 +102,31 @@ func (event Event) DeleteEvent() error {
 	defer stmt.Close()
 
 	_, err = stmt.Exec(event.ID)
+	return err
+}
+
+func (event *Event) Register(userId int64) error {
+	query := "INSERT INTO Registrations(EventId,UserId) VALUES(?,?)"
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.ID, userId)
+
+	return err
+}
+
+func (event Event) CancelRegistration(userId int64) error {
+	query := "DELETE FROM Registrations WHERE EventId = ? AND UserId = ?"
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.ID, userId)
+
 	return err
 }

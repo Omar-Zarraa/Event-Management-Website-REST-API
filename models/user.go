@@ -3,8 +3,8 @@ package models
 import (
 	"errors"
 
-	"github.com/Omar-Zarraa/REST-API/db"
-	"github.com/Omar-Zarraa/REST-API/utils"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/db"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/utils"
 )
 
 type User struct {

@@ -3,8 +3,8 @@ package routes
 import (
 	"net/http"
 
-	"github.com/Omar-Zarraa/REST-API/models"
-	"github.com/Omar-Zarraa/REST-API/utils"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/models"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/utils"
 	"github.com/gin-gonic/gin"
 )
 

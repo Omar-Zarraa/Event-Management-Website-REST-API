@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Omar-Zarraa/REST-API/db"
-	"github.com/Omar-Zarraa/REST-API/routes"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/db"
+	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/routes"
 	"github.com/gin-gonic/gin"
 )
 
