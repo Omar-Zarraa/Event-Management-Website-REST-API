@@ -1,3 +1,4 @@
+//Package models handles the logic and structure of the events and users.
 package models
 
 import (
@@ -6,6 +7,7 @@ import (
 	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/db"
 )
 
+//Event specifies the structure of the events to be used in the database.
 type Event struct {
 	ID          int64
 	Name        string    `binding:"required"`
@@ -15,8 +17,10 @@ type Event struct {
 	UserID      int64
 }
 
+//events is an empty Event
 var events []Event = []Event{}
 
+//Save inserts into the database the event that was used to call this method, possibly returns an error.
 func (event *Event) Save() error {
 	insertQuery := `INSERT INTO Events (Name, Description,Location,Date,UserId)
 	VALUES (?,?,?,?,?)`
@@ -37,6 +41,7 @@ func (event *Event) Save() error {
 	return err
 }
 
+//GetAllEvents returns all the events in the table as an Event slice, and possibly returns an error.
 func GetAllEvents() ([]Event, error) {
 	selectQuery := `SELECT * FROM Events`
 
@@ -64,6 +69,7 @@ func GetAllEvents() ([]Event, error) {
 	return events, nil
 }
 
+//GetEventByID takes the id of the desired event as a parameter and returns a pointer to the event, and possibly an error.
 func GetEventByID(id int64) (*Event, error) {
 	query := "SELECT * FROM Events WHERE ID = ?"
 	row := db.DB.QueryRow(query, id)
@@ -75,6 +81,7 @@ func GetEventByID(id int64) (*Event, error) {
 	return &event, nil
 }
 
+//UpdateEvent updates the event that was used to call this method in the database, and possibly returns an error.
 func (event Event) UpdateEvent() error {
 	updateQuery :=
 		`UPDATE Events
@@ -91,6 +98,7 @@ func (event Event) UpdateEvent() error {
 	return err
 }
 
+//DeleteEvent deletes the event that was used to call this method from the database, and possibly returns an error.
 func (event Event) DeleteEvent() error {
 	delQuery := `DELETE FROM Events
 	WHERE ID = ?`
@@ -105,6 +113,7 @@ func (event Event) DeleteEvent() error {
 	return err
 }
 
+//Register takes the userId as a parameter and inserts it into the Registrations table along with the eventId of the event used to call this method, possibly returns an error.
 func (event *Event) Register(userId int64) error {
 	query := "INSERT INTO Registrations(EventId,UserId) VALUES(?,?)"
 	stmt, err := db.DB.Prepare(query)
@@ -118,6 +127,7 @@ func (event *Event) Register(userId int64) error {
 	return err
 }
 
+//CancelRegistration takes the userId as a parameter and deletes the row containg the userId and the id of the event used to call this method from the Registrations table, possibly returns an error.
 func (event Event) CancelRegistration(userId int64) error {
 	query := "DELETE FROM Registrations WHERE EventId = ? AND UserId = ?"
 	stmt, err := db.DB.Prepare(query)

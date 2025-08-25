@@ -1,3 +1,4 @@
+// Package db is the package handling the database.
 package db
 
 import (
@@ -6,8 +7,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+// DB is the database variable.
 var DB *sql.DB
 
+// InitDB initializes the database of type sqlite3 and calls on the createTables function.
 func InitDB() {
 	var err error
 	DB, err = sql.Open("sqlite3", "api.db")
@@ -22,6 +25,7 @@ func InitDB() {
 	createTables()
 }
 
+// createTables initializes the three tables used; Users(ID, Email, Password), Events(ID, Name, Description, Location, Date, UserId), and Registrations(ID, EventId, UserId).
 func createTables() {
 	createUsersTable := `
 	CREATE TABLE IF NOT EXISTS Users (

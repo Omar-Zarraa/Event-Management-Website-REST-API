@@ -1,3 +1,4 @@
+//Package middlewares contains the middleware used for password authentication.
 package middlewares
 
 import (
@@ -7,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//Authenticate gets the authentication token sent with the user and sends it to the 'VerifyAuthToken' function.
 func Authenticate(con *gin.Context) {
 	token := con.Request.Header.Get("Authorization")
 

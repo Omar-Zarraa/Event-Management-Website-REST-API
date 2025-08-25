@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//signup parses the data it recieves and sends it to the 'Save' method.
 func signup(con *gin.Context) {
 	var user models.User
 
@@ -26,6 +27,7 @@ func signup(con *gin.Context) {
 	con.JSON(http.StatusCreated, gin.H{"message": "User created"})
 }
 
+//login parses the data it recieves and sends it to the 'ValidateUser' method.
 func login(con *gin.Context) {
 	var user models.User
 
@@ -48,13 +50,4 @@ func login(con *gin.Context) {
 	}
 
 	con.JSON(http.StatusOK, gin.H{"message": "Login successful", "token": token})
-}
-
-func getUsers(con *gin.Context) {
-	users, err := models.GetAllUsers()
-	if err != nil {
-		con.JSON(http.StatusInternalServerError, gin.H{"message": "Could not get users"})
-		return
-	}
-	con.JSON(http.StatusOK, users)
 }

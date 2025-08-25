@@ -1,3 +1,4 @@
+//Package routes handles the requests coming to the API.
 package routes
 
 import (
@@ -5,6 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//RegisterRoutes specifies which function to call on for each request/route pair.
+//(GET/'/events'): returns all events, (GET/'/event/:id'): returns the specified event, (POST/'/events'): create an event,
+//(PUT/'/events/:id'): update specified event, (DELETE/'/events/:id'): delete specified event, (POST/'/events/:id/register'): register user for specified event,
+//(DELETE/'/events/:id/register'): cancel the registration on specified event, (POST'/signup'): create a user account, (POST/'/login'): log into user account.
 func RegisterRoutes(server *gin.Engine) {
 	server.GET("/events", getEvents)
 	server.GET("/events/:id", getEvent)
@@ -19,5 +24,4 @@ func RegisterRoutes(server *gin.Engine) {
 
 	server.POST("/signup", signup)
 	server.POST("/login", login)
-	server.GET("/users", getUsers)
 }

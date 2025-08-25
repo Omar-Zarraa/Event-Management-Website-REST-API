@@ -7,12 +7,14 @@ import (
 	"github.com/Omar-Zarraa/Event-Management-Website-REST-API/utils"
 )
 
+//User specifies the structure of the users to be used in the database.
 type User struct {
 	ID       int64
 	Email    string `binding:"required"`
 	Password string `binding:"required"`
 }
 
+//Save inserts into the Users table the data of the user used to call this method, possibly returns an error.
 func (user User) Save() error {
 	query := "INSERT INTO Users(Email,Password) VALUES (?,?)"
 
@@ -38,6 +40,7 @@ func (user User) Save() error {
 	return err
 }
 
+//ValidateUser checks if the user data in the user that was used to call this method are valid and are found in the database, possibly returns an error.
 func (user *User) ValidateUser() error {
 	query := "SELECT ID, Password FROM Users WHERE Email=?"
 	row := db.DB.QueryRow(query, user.Email)
@@ -53,31 +56,4 @@ func (user *User) ValidateUser() error {
 	}
 
 	return nil
-}
-
-func GetAllUsers() ([]User, error) {
-	selectQuery := `SELECT * FROM Users`
-
-	rows, err := db.DB.Query(selectQuery)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var users = []User{}
-
-	for rows.Next() {
-		var user User
-		err := rows.Scan(&user.ID, &user.Email, &user.Password)
-		if err != nil {
-			return nil, err
-		}
-		users = append(users, user)
-	}
-
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return users, nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//registerForEvent gets the userId of the user and the id of the event from the id parameter and sends them to the 'Register' method.
 func registerForEvent(con *gin.Context) {
 	userId := con.GetInt64("userId")
 
@@ -32,6 +33,7 @@ func registerForEvent(con *gin.Context) {
 	con.JSON(http.StatusCreated, gin.H{"message": "Registered"})
 }
 
+//cancelRegistration gets the userId of the user and the id of the event from the id parameter and sends them to the 'CancelRegistration' method.
 func cancelRegistration(con *gin.Context) {
 	userId := con.GetInt64("userId")
 
